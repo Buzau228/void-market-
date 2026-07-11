@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOID MARKET — Маркетплейс одежды</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #111113;
+    --bg2: #18181c;
+    --bg3: #1f1f25;
+    --surface: #252530;
+    --surface2: #2e2e3a;
+    --border: #333344;
+    --border2: #444458;
+    --text: #e8e8f0;
+    --text2: #9999b0;
+    --text3: #66667a;
+    --accent: #c8c8e8;
+    --accent2: #8888cc;
+    --accent3: #5555aa;
+    --red: #e05555;
+    --green: #55c88a;
+    --tag: #2a2a40;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 32px rgba(0,0,0,0.5);
+    --shadow2: 0 2px 12px rgba(0,0,0,0.4);
+    --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ===== NOISE OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(17,17,19,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    color: var(--text);
+    cursor: pointer;
+    position: relative;
+  }
+  .logo span { color: var(--accent2); }
+
+  .header-actions { display: flex; gap: 12px; align-items: center; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: var(--accent2);
+    color: #0a0a12;
+    font-weight: 700;
+  }
+  .btn-primary:hover { background: var(--accent); box-shadow: 0 0 24px rgba(136,136,204,0.35); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--surface); color: var(--text); border-color: var(--border2); }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 80px 32px 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  .hero h1 em { color: var(--accent2); font-style: normal; }
+  .hero p { color: var(--text2); font-size: 16px; max-width: 480px; line-height: 1.7; margin-bottom: 40px; }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 12px;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-label { font-size: 12px; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .filter-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: border-color var(--transition);
+  }
+  .filter-block:hover { border-color: var(--border2); }
+
+  .filter-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .filter-options { display: flex; flex-direction: column; gap: 8px; }
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: background var(--transition);
+    color: var(--text2);
+    font-size: 14px;
+    user-select: none;
+  }
+  .filter-option:hover { background: var(--surface); color: var(--text); }
+  .filter-option.active { background: var(--tag); color: var(--accent); }
+
+  .filter-option input[type=checkbox] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    background: var(--bg3);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all var(--transition);
+    position: relative;
+  }
+  .filter-option input[type=checkbox]:checked {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+  .filter-option input[type=checkbox]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 10px;
+    color: #0a0a12;
+    font-weight: 700;
+  }
+
+  .price-range { display: flex; gap: 8px; align-items: center; }
+  .price-input {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    width: 100%;
+    transition: border-color var(--transition);
+    outline: none;
+  }
+  .price-input:focus { border-color: var(--accent2); }
+  .price-sep { color: var(--text3); font-size: 12px; flex-shrink: 0; }
+
+  .color-dots { display: flex; flex-wrap: wrap; gap: 8px; }
+  .color-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--transition);
+    position: relative;
+  }
+  .color-dot:hover { transform: scale(1.1); }
+  .color-dot.active { border-color: var(--text); }
+  .color-dot.active::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 11px;
+    color: white;
+    text-shadow: 0 0 4px #000;
+    font-weight: 700;
+  }
+
+  /* ===== PRODUCTS AREA ===== */
+  .products-area { display: flex; flex-direction: column; gap: 24px; }
+
+  .products-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex: 1;
+    max-width: 400px;
+    transition: border-color var(--transition);
+  }
+  .search-bar:focus-within { border-color: var(--accent2); }
+  .search-bar svg { margin-left: 14px; color: var(--text3); flex-shrink: 0; }
+  .search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    width: 100%;
+  }
+  .search-bar input::placeholder { color: var(--text3); }
+
+  .sort-select {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--transition);
+  }
+  .sort-select:focus { border-color: var(--accent2); }
+
+  /* ===== PRODUCT GRID ===== */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .product-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    position: relative;
+    animation: fadeIn 0.4s ease both;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border2);
+    box-shadow: var(--shadow);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-image {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--bg3);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text3);
+    font-size: 13px;
+  }
+  .card-image-placeholder svg { opacity: 0.3; }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .product-card:hover .card-img { transform: scale(1.04); }
+
+  .card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--accent3);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .card-body { padding: 16px; }
+
+  .card-type {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tag {
+    background: var(--tag);
+    color: var(--text2);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--accent);
+  }
+  .card-condition {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    grid-column: 1/-1;
+    padding: 80px 32px;
+    text-align: center;
+    color: var(--text3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .empty-state svg { opacity: 0.2; }
+  .empty-state h3 { font-size: 20px; color: var(--text2); }
+
+  /* ===== MODAL OVERLAY ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95) translateY(20px);
+    transition: transform var(--transition);
+    box-shadow: var(--shadow);
+  }
+  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+  .modal-header {
+    padding: 28px 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+  .modal-close {
+    background: var(--surface);
+    border: none;
+    color: var(--text2);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition), color var(--transition);
+  }
+  .modal-close:hover { background: var(--red); color: white; }
+
+  .modal-body { padding: 0 28px 28px; display: flex; flex-direction: column; gap: 18px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color var(--transition), background var(--transition);
+    width: 100%;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--accent2);
+    background: var(--bg2);
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--text3); }
+  .form-select { cursor: pointer; }
+  .form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+  /* Size selector */
+  .size-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .size-btn {
+    padding: 6px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text2);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .size-btn:hover { border-color: var(--border2); color: var(--text); }
+  .size-btn.active { background: var(--accent2); border-color: var(--accent2); color: #0a0a12; font-weight: 700; }
+
+  /* Color picker */
+  .color-picker { display: flex; flex-wrap: wrap; gap: 10px; }
+  .color-pick-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--transition);
+    position: relative;
+  }
+  .color-pick-dot:hover { transform: scale(1.12); }
+  .color-pick-dot.active { border-color: var(--text); box-shadow: 0 0 0 3px var(--bg3); }
+  .color-pick-dot.active::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 12px;
+    color: white;
+    text-shadow: 0 0 4px #000;
+    font-weight: 700;
+  }
+
+  /* Image upload */
+  .upload-area {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: var(--text3);
+    position: relative;
+  }
+  .upload-area:hover { border-color: var(--accent2); color: var(--text2); background: var(--bg3); }
+  .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .upload-area p { font-size: 13px; margin-top: 8px; }
+
+  .upload-preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .upload-thumb {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+  .upload-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .upload-thumb-remove {
+    position: absolute;
+    top: 4px; right: 4px;
+    background: rgba(0,0,0,0.7);
+    border: none;
+    color: white;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ===== DETAIL MODAL ===== */
+  .detail-modal {
+    max-width: 860px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .detail-images {
+    background: var(--bg3);
+    border-radius: 14px 0 0 14px;
+    overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .detail-img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-no-img { color: var(--text3); display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0.4; }
+  .detail-content { padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .detail-type {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    text-transform: uppercase;
+  }
+  .detail-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+  .detail-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .detail-desc {
+    color: var(--text2);
+    line-height: 1.7;
+    font-size: 14px;
+    flex: 1;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .detail-meta { display: flex; flex-direction: column; gap: 10px; }
+  .detail-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .detail-meta-row span:first-child {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+  .detail-contact {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .detail-contact-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+  .detail-phone {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+  .btn-call {
+    background: var(--green);
+    color: #0a1a12;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all var(--transition);
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .btn-call:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 14px 20px;
+    color: var(--text);
+    font-size: 14px;
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all var(--transition);
+    max-width: 320px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--green); }
+  .toast.error { border-color: var(--red); }
+
+  /* ===== TABS ===== */
+  .tabs { display: flex; gap: 4px; background: var(--bg3); border-radius: var(--radius-sm); padding: 4px; }
+  .tab {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all var(--transition);
+    color: var(--text2);
+    border: none;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab.active { background: var(--surface2); color: var(--text); }
+
+  /* ===== SECTION DIVIDER ===== */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .section-title h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .section-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    white-space: nowrap;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .hero { padding: 48px 20px 40px; }
+    header { padding: 0 20px; }
+    .main-layout { padding: 0 20px 60px; }
+    .detail-modal { grid-template-columns: 1fr; }
+    .detail-images { border-radius: 14px 14px 0 0; min-height: 260px; }
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 48px; }
+    .hero-stats { gap: 24px; }
+    .products-header { flex-direction: column; align-items: stretch; }
+    .search-bar { max-width: 100%; }
+    .form-row { grid-template-columns: 1fr; }
+    .upload-preview { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">VOID<span>.</span>MARKET</div>
+  <div class="header-actions">
+    <button class="btn btn-ghost" onclick="openModal('addModal')">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Добавить объявление
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">// Маркетплейс одежды</div>
+  <h1>Найди <em>стиль</em><br>купи, продай</h1>
+  <p>Платформа для продажи и покупки одежды. Публикуй объявления с фото, размерами и описанием — находи покупателей напрямую.</p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num" id="stat-items">0</span>
+      <span class="stat-label">объявлений</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">100%</span>
+      <span class="stat-label">бесплатно</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">прямой</span>
+      <span class="stat-label">контакт</span>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="filter-block">
+      <div class="filter-title">Тип одежды</div>
+      <div class="filter-options" id="typeFilters">
+        <label class="filter-option active">
+          <input type="checkbox" value="all" checked onchange="applyFilters()"> Все категории
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Верхняя одежда" onchange="applyFilters()"> Верхняя одежда
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Футболки" onchange="applyFilters()"> Футболки
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Худи / Свитшоты" onchange="applyFilters()"> Худи / Свитшоты
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Брюки / Джинсы" onchange="applyFilters()"> Брюки / Джинсы
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Обувь" onchange="applyFilters()"> Обувь
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Аксессуары" onchange="applyFilters()"> Аксессуары
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Платья / Юбки" onchange="applyFilters()"> Платья / Юбки
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Спортивная" onchange="applyFilters()"> Спортивная
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-title">Цена (₸)</div>
+      <div class="price-range">
+        <input class="price-input" type="number" id="priceMin" placeholder="От" oninput="applyFilters()">
+        <span class="price-sep">—</span>
+        <input class="price-input" type="number" id="priceMax" placeholder="До" oninput="applyFilters()">
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-title">Цвет</div>
+      <div class="color-dots" id="colorFilters">
+        <div class="color-dot active" style="background:#1a1a1a; border: 1px solid #555;" data-color="all" title="Все" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#2a2a2a; border: 1px solid #777;" data-color="Чёрный" title="Чёрный" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#f5f5f5; border: 1px solid #ccc;" data-color="Белый" title="Белый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#888;" data-color="Серый" title="Серый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#c0392b;" data-color="Красный" title="Красный" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#2980b9;" data-color="Синий" title="Синий" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#27ae60;" data-color="Зелёный" title="Зелёный" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#f39c12;" data-color="Жёлтый" title="Жёлтый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#8e44ad;" data-color="Фиолетовый" title="Фиолетовый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#e67e22;" data-color="Оранжевый" title="Оранжевый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#e91e63;" data-color="Розовый" title="Розовый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#4a3728;" data-color="Коричневый" title="Коричневый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:#b8c5c0;" data-color="Бежевый" title="Бежевый" onclick="filterColor(this)"></div>
+        <div class="color-dot" style="background:linear-gradient(135deg,#f44,#44f,#4f4);" data-color="Принт" title="Принт" onclick="filterColor(this)"></div>
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <div class="filter-title">Состояние</div>
+      <div class="filter-options">
+        <label class="filter-option">
+          <input type="checkbox" value="Новое" onchange="applyFilters()"> Новое
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Отличное" onchange="applyFilters()"> Отличное
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Хорошее" onchange="applyFilters()"> Хорошее
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" value="Среднее" onchange="applyFilters()"> Среднее
+        </label>
+      </div>
+    </div>
+
+    <button class="btn btn-ghost" onclick="resetFilters()" style="width:100%;">
+      Сбросить фильтры
+    </button>
+  </aside>
+
+  <!-- PRODUCTS -->
+  <section class="products-area">
+    <div class="products-header">
+      <div class="search-bar">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Поиск по названию, бренду..." oninput="applyFilters()">
+      </div>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="new">Сначала новые</option>
+        <option value="price-asc">Цена: по возрастанию</option>
+        <option value="price-desc">Цена: по убыванию</option>
+      </select>
+    </div>
+
+    <div class="section-title">
+      <h2>Объявления</h2>
+      <div class="section-line"></div>
+      <span class="section-count" id="countLabel">0 позиций</span>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <!-- cards rendered by JS -->
+    </div>
+  </section>
+</div>
+
+<!-- ===== ADD MODAL ===== -->
+<div class="modal-overlay" id="addModal" onclick="handleOverlayClick(event,'addModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Новое объявление</div>
+      <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Название вещи *</label>
+          <input class="form-input" id="itemName" type="text" placeholder="Напр. Nike Air Force 1 White">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Бренд</label>
+          <input class="form-input" id="itemBrand" type="text" placeholder="Nike, Zara, Uniqlo...">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Тип одежды *</label>
+          <select class="form-select" id="itemType">
+            <option value="">— Выберите тип —</option>
+            <option>Верхняя одежда</option>
+            <option>Футболки</option>
+            <option>Худи / Свитшоты</option>
+            <option>Брюки / Джинсы</option>
+            <option>Обувь</option>
+            <option>Аксессуары</option>
+            <option>Платья / Юбки</option>
+            <option>Спортивная</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Состояние *</label>
+          <select class="form-select" id="itemCondition">
+            <option value="">— Выберите —</option>
+            <option>Новое</option>
+            <option>Отличное</option>
+            <option>Хорошее</option>
+            <option>Среднее</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Размеры</label>
+        <div class="size-grid" id="sizeGrid">
+          <div class="size-btn" onclick="toggleSize(this)">XXS</div>
+          <div class="size-btn" onclick="toggleSize(this)">XS</div>
+          <div class="size-btn" onclick="toggleSize(this)">S</div>
+          <div class="size-btn" onclick="toggleSize(this)">M</div>
+          <div class="size-btn" onclick="toggleSize(this)">L</div>
+          <div class="size-btn" onclick="toggleSize(this)">XL</div>
+          <div class="size-btn" onclick="toggleSize(this)">XXL</div>
+          <div class="size-btn" onclick="toggleSize(this)">3XL</div>
+          <div class="size-btn" onclick="toggleSize(this)">36</div>
+          <div class="size-btn" onclick="toggleSize(this)">37</div>
+          <div class="size-btn" onclick="toggleSize(this)">38</div>
+          <div class="size-btn" onclick="toggleSize(this)">39</div>
+          <div class="size-btn" onclick="toggleSize(this)">40</div>
+          <div class="size-btn" onclick="toggleSize(this)">41</div>
+          <div class="size-btn" onclick="toggleSize(this)">42</div>
+          <div class="size-btn" onclick="toggleSize(this)">43</div>
+          <div class="size-btn" onclick="toggleSize(this)">44</div>
+          <div class="size-btn" onclick="toggleSize(this)">One Size</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Цвет(а)</label>
+        <div class="color-picker" id="colorPicker">
+          <div class="color-pick-dot" style="background:#1a1a1a; border: 1px solid #666;" data-color="Чёрный" title="Чёрный" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#f5f5f5; border: 1px solid #aaa;" data-color="Белый" title="Белый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#888;" data-color="Серый" title="Серый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#c0392b;" data-color="Красный" title="Красный" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#2980b9;" data-color="Синий" title="Синий" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#27ae60;" data-color="Зелёный" title="Зелёный" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#f39c12;" data-color="Жёлтый" title="Жёлтый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#8e44ad;" data-color="Фиолетовый" title="Фиолетовый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#e67e22;" data-color="Оранжевый" title="Оранжевый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#e91e63;" data-color="Розовый" title="Розовый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#4a3728;" data-color="Коричневый" title="Коричневый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:#b8c5c0;" data-color="Бежевый" title="Бежевый" onclick="toggleColor(this)"></div>
+          <div class="color-pick-dot" style="background:linear-gradient(135deg,#f44,#44f,#4f4);" data-color="Принт" title="Принт" onclick="toggleColor(this)"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Описание *</label>
+        <textarea class="form-textarea" id="itemDesc" placeholder="Опишите вещь: состояние, особенности, история использования, причина продажи..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Цена (₸) *</label>
+          <input class="form-input" id="itemPrice" type="number" placeholder="15000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Контактный номер *</label>
+          <input class="form-input" id="itemPhone" type="tel" placeholder="+7 777 000 00 00">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Город</label>
+        <input class="form-input" id="itemCity" type="text" placeholder="Алматы">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Фотографии</label>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" accept="image/*" multiple onchange="handleImages(event)">
+          <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+          <p>Нажмите или перетащите фото сюда<br><small>Поддерживаются JPG, PNG, WEBP</small></p>
+        </div>
+        <div class="upload-preview" id="uploadPreview"></div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%; justify-content:center; padding:14px;" onclick="submitItem()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+        Опубликовать объявление
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL MODAL ===== -->
+<div class="modal-overlay" id="detailModal" onclick="handleOverlayClick(event,'detailModal')">
+  <div class="modal detail-modal" id="detailContent">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ===== STATE =====
+  let items = JSON.parse(localStorage.getItem('voidmarket_items') || '[]');
+  let selectedSizes = [];
+  let selectedColors = [];
+  let uploadedImages = [];
+  let activeColorFilter = 'all';
+
+  // ===== SAVE =====
+  function saveItems() {
+    localStorage.setItem('voidmarket_items', JSON.stringify(items));
+    updateStatCounter();
+  }
+
+  function updateStatCounter() {
+    document.getElementById('stat-items').textContent = items.length;
+  }
+
+  // ===== MODAL =====
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  }
+
+  // ===== SIZE TOGGLE =====
+  function toggleSize(el) {
+    el.classList.toggle('active');
+    const sz = el.textContent;
+    if (selectedSizes.includes(sz)) {
+      selectedSizes = selectedSizes.filter(s => s !== sz);
+    } else {
+      selectedSizes.push(sz);
+    }
+  }
+
+  // ===== COLOR TOGGLE =====
+  function toggleColor(el) {
+    el.classList.toggle('active');
+    const c = el.dataset.color;
+    if (selectedColors.includes(c)) {
+      selectedColors = selectedColors.filter(x => x !== c);
+    } else {
+      selectedColors.push(c);
+    }
+  }
+
+  // ===== IMAGE UPLOAD =====
+  function handleImages(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(f => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        uploadedImages.push(ev.target.result);
+        renderPreviews();
+      };
+      reader.readAsDataURL(f);
+    });
+  }
+
+  function renderPreviews() {
+    const container = document.getElementById('uploadPreview');
+    container.innerHTML = uploadedImages.map((src, i) => `
+      <div class="upload-thumb">
+        <img src="${src}" alt="">
+        <button class="upload-thumb-remove" onclick="removeImage(${i})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  function removeImage(i) {
+    uploadedImages.splice(i, 1);
+    renderPreviews();
+  }
+
+  // ===== SUBMIT =====
+  function submitItem() {
+    const name = document.getElementById('itemName').value.trim();
+    const type = document.getElementById('itemType').value;
+    const condition = document.getElementById('itemCondition').value;
+    const price = document.getElementById('itemPrice').value;
+    const phone = document.getElementById('itemPhone').value.trim();
+    const desc = document.getElementById('itemDesc').value.trim();
+
+    if (!name || !type || !condition || !price || !phone || !desc) {
+      showToast('⚠ Заполните все обязательные поля', 'error');
+      return;
+    }
+
+    const item = {
+      id: Date.now(),
+      name,
+      brand: document.getElementById('itemBrand').value.trim(),
+      type,
+      condition,
+      price: parseInt(price),
+      phone,
+      desc,
+      city: document.getElementById('itemCity').value.trim() || 'Не указан',
+      sizes: [...selectedSizes],
+      colors: [...selectedColors],
+      images: [...uploadedImages],
+      date: new Date().toLocaleDateString('ru-RU')
+    };
+
+    items.unshift(item);
+    saveItems();
+    renderCards(getFiltered());
+    closeModal('addModal');
+    resetForm();
+    showToast('✓ Объявление опубликовано!', 'success');
+  }
+
+  function resetForm() {
+    ['itemName','itemBrand','itemDesc','itemPrice','itemPhone','itemCity'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('itemType').value = '';
+    document.getElementById('itemCondition').value = '';
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.color-pick-dot').forEach(d => d.classList.remove('active'));
+    selectedSizes = [];
+    selectedColors = [];
+    uploadedImages = [];
+    renderPreviews();
+  }
+
+  // ===== RENDER CARDS =====
+  function renderCards(data) {
+    const grid = document.getElementById('productsGrid');
+    const countLabel = document.getElementById('countLabel');
+    countLabel.textContent = `${data.length} позиц${data.length === 1 ? 'ия' : data.length < 5 ? 'ии' : 'ий'}`;
+
+    if (data.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>
+          <h3>Объявлений не найдено</h3>
+          <p style="color:var(--text3); font-size:13px;">Попробуйте изменить фильтры или добавьте первое объявление</p>
+          <button class="btn btn-primary" onclick="openModal('addModal')" style="margin-top:8px;">Добавить объявление</button>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = data.map((item, idx) => {
+      const imgHtml = item.images && item.images.length > 0
+        ? `<img class="card-img" src="${item.images[0]}" alt="${item.name}">`
+        : `<div class="card-image-placeholder">
+            <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>
+            <span>Нет фото</span>
+          </div>`;
+
+      const colorsHtml = item.colors.length > 0
+        ? item.colors.slice(0,3).map(c => `<span class="tag">${c}</span>`).join('')
+        : '';
+      const sizesHtml = item.sizes.length > 0
+        ? item.sizes.slice(0,3).map(s => `<span class="tag">${s}</span>`).join('')
+        : '';
+
+      return `
+        <div class="product-card" onclick="openDetail(${item.id})" style="animation-delay:${idx*0.05}s">
+          <div class="card-image">
+            ${imgHtml}
+            ${item.condition === 'Новое' ? '<span class="card-badge">Новое</span>' : ''}
+          </div>
+          <div class="card-body">
+            <div class="card-type">${item.type}${item.brand ? ' · ' + item.brand : ''}</div>
+            <div class="card-title">${item.name}</div>
+            <div class="card-tags">
+              ${sizesHtml}
+              ${colorsHtml}
+            </div>
+            <div class="card-footer">
+              <span class="card-price">${item.price.toLocaleString('ru-RU')} ₸</span>
+              <span class="card-condition">${item.condition}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ===== DETAIL =====
+  function openDetail(id) {
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+
+    const imgSection = item.images && item.images.length > 0
+      ? `<img class="detail-img" src="${item.images[0]}" alt="${item.name}">`
+      : `<div class="detail-no-img">
+          <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>
+          <span>Фото отсутствует</span>
+        </div>`;
+
+    document.getElementById('detailContent').innerHTML = `
+      <div class="detail-images">${imgSection}</div>
+      <div class="detail-content">
+        <button class="modal-close" onclick="closeModal('detailModal')" style="align-self:flex-end; margin-bottom:-8px;">✕</button>
+        <div class="detail-type">${item.type}${item.brand ? ' · ' + item.brand : ''}</div>
+        <div class="detail-title">${item.name}</div>
+        <div class="detail-price">${item.price.toLocaleString('ru-RU')} ₸</div>
+        <div class="detail-desc">${item.desc.replace(/\n/g,'<br>')}</div>
+        <div class="detail-meta">
+          ${item.sizes.length > 0 ? `
+          <div class="detail-meta-row">
+            <span>Размер</span>
+            <span>${item.sizes.join(', ')}</span>
+          </div>` : ''}
+          ${item.colors.length > 0 ? `
+          <div class="detail-meta-row">
+            <span>Цвет</span>
+            <span>${item.colors.join(', ')}</span>
+          </div>` : ''}
+          <div class="detail-meta-row">
+            <span>Состояние</span>
+            <span>${item.condition}</span>
+          </div>
+          <div class="detail-meta-row">
+            <span>Город</span>
+            <span>${item.city}</span>
+          </div>
+          <div class="detail-meta-row">
+            <span>Дата</span>
+            <span>${item.date}</span>
+          </div>
+        </div>
+        <div class="detail-contact">
+          <div class="detail-contact-label">Контакт продавца</div>
+          <div class="detail-phone">${item.phone}</div>
+          <a class="btn-call" href="tel:${item.phone.replace(/\s/g,'')}">📞 Позвонить продавцу</a>
+        </div>
+        <button class="btn btn-ghost" style="font-size:12px; color:var(--red); border-color: rgba(224,85,85,0.3);" onclick="deleteItem(${item.id})">Удалить объявление</button>
+      </div>
+    `;
+    openModal('detailModal');
+  }
+
+  // ===== DELETE =====
+  function deleteItem(id) {
+    if (!confirm('Удалить это объявление?')) return;
+    items = items.filter(i => i.id !== id);
+    saveItems();
+    renderCards(getFiltered());
+    closeModal('detailModal');
+    showToast('Объявление удалено', 'error');
+  }
+
+  // ===== FILTERS =====
+  function getFiltered() {
+    let data = [...items];
+
+    // Search
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    if (q) {
+      data = data.filter(i =>
+        i.name.toLowerCase().includes(q) ||
+        (i.brand && i.brand.toLowerCase().includes(q)) ||
+        i.desc.toLowerCase().includes(q)
+      );
+    }
+
+    // Type checkboxes
+    const typeChecks = Array.from(document.querySelectorAll('#typeFilters input:checked'));
+    const allChecked = typeChecks.some(c => c.value === 'all');
+    if (!allChecked && typeChecks.length > 0) {
+      const types = typeChecks.map(c => c.value);
+      data = data.filter(i => types.includes(i.type));
+    }
+
+    // Condition
+    const condChecks = Array.from(document.querySelectorAll('.filter-options:last-child input:checked'));
+    if (condChecks.length > 0) {
+      const conds = condChecks.map(c => c.value);
+      data = data.filter(i => conds.includes(i.condition));
+    }
+
+    // Price
+    const pMin = parseInt(document.getElementById('priceMin').value) || 0;
+    const pMax = parseInt(document.getElementById('priceMax').value) || Infinity;
+    data = data.filter(i => i.price >= pMin && i.price <= pMax);
+
+    // Color filter
+    if (activeColorFilter !== 'all') {
+      data = data.filter(i => i.colors.includes(activeColorFilter));
+    }
+
+    // Sort
+    const sort = document.getElementById('sortSelect').value;
+    if (sort === 'price-asc') data.sort((a,b) => a.price - b.price);
+    else if (sort === 'price-desc') data.sort((a,b) => b.price - a.price);
+
+    return data;
+  }
+
+  function applyFilters() {
+    renderCards(getFiltered());
+  }
+
+  function filterColor(el) {
+    document.querySelectorAll('#colorFilters .color-dot').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+    activeColorFilter = el.dataset.color;
+    applyFilters();
+  }
+
+  function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('priceMin').value = '';
+    document.getElementById('priceMax').value = '';
+    document.getElementById('sortSelect').value = 'new';
+    document.querySelectorAll('#typeFilters input').forEach(c => {
+      c.checked = c.value === 'all';
+    });
+    document.querySelectorAll('.filter-options').forEach(fo => {
+      fo.querySelectorAll('input[type=checkbox]').forEach(c => {
+        if (fo.id !== 'typeFilters') c.checked = false;
+      });
+    });
+    activeColorFilter = 'all';
+    document.querySelectorAll('#colorFilters .color-dot').forEach((d,i) => {
+      d.classList.toggle('active', i === 0);
+    });
+    applyFilters();
+  }
+
+  // ===== TOAST =====
+  function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ===== FILTER OPTION ACTIVE CLASS =====
+  document.querySelectorAll('.filter-option input').forEach(inp => {
+    inp.addEventListener('change', function() {
+      this.closest('.filter-option').classList.toggle('active', this.checked);
+    });
+  });
+
+  // ===== INIT =====
+  updateStatCounter();
+  renderCards(items);
+
+  // ESC to close
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal('addModal');
+      closeModal('detailModal');
+    }
+  });
+</script>
+</body>
+</html>
